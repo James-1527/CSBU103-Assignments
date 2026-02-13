@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Login Page</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <link href="public/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <script src="public/js/jquery.min.js"></script>
+  <script src="public/js/app.js"></script>
+  <script src="public/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      color: #333;
+      padding-top: 20px;
+    }
+
+    .main-container {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      padding: 30px;
+      margin-bottom: 30px;
+    }
+
+    .page-header {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #4a4a4a;
+      font-weight: 700;
+    }
+
+    .table-container {
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      margin-bottom: 30px;
+    }
+
+    .table thead {
+      background: #667eea;
+      color: white;
+    }
+
+    .form-container {
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 10px;
+      border: 1px solid #e9ecef;
+    }
+
+    .btn-create-section {
+      margin-top: 10px;
+    }
+
+    .action-btn {
+      margin-right: 5px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container main-container">
+    <h1 id="firstHeading" class="page-header">Login Page</h1>
+
+    <!-- User List Section -->
+    <div class="row">
+      <div class="col-12">
+        <h4 class="mb-3 text-secondary">User List</h4>
+        <div id="userList" class="table-container">
+          <table class="table table-hover mb-0">
+            <thead>
+              <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Username</th>
+                <th scope="col">Name</th>
+                <th scope="col">Gender</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% if (data && data.length> 0) { %>
+                <% data.forEach(function(val) { %>
+                  <tr class="user-id" data-userid="<%= val.id %>">
+                    <td scope="row"><small class="text-muted">
+                        <%= val.id.substring(0, 8) %>...
+                      </small></td>
+                    <td class="username">
+                      <%= val.username %>
+                    </td>
+                    <td class="name">
+                      <%= val.name || '-' %>
+                    </td>
+                    <td class="gender">
+                      <%= val.gender || '-' %>
+                    </td>
+                    <td>
+                      <button class="del-btn btn btn-sm btn-outline-danger action-btn"
+                        data-id="<%= val.id %>">Delete</button>
+                      <button class="update-btn btn btn-sm btn-outline-warning action-btn"
+                        data-id="<%= val.id %>">Update</button>
+                    </td>
+                  </tr>
+                  <% }); %>
+                    <% } else { %>
+                      <tr>
+                        <td colspan="5" class="text-center">No users found</td>
+                      </tr>
+                      <% } %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Management Section -->
+    <div class="row">
+      <div class="col-md-6">
+        <h4 class="mb-3 text-secondary">Manage User</h4>
+        <div class="form-container">
+          <form id="createUserForm" method="POST" action="/users/create">
+            <div class="mb-2">
+              <label class="form-label small text-muted" for="user_id">UserID (Auto)</label>
+              <input class="form-control form-control-sm" type="text" id="user_id" name="user_id" disabled>
+            </div>
+            <div class="mb-2">
+              <label class="form-label" for="username">Username</label>
+              <input class="form-control" type="text" id="username" name="username" required>
+            </div>
+            <div class="mb-2">
+              <label class="form-label" for="name">Name</label>
+              <input class="form-control" type="text" id="name" name="name">
+            </div>
+            <div class="mb-3">
+              <label class="form-label d-block">Gender</label>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" id="male" name="gender" value="male">
+                <label class="form-check-label" for="male">Male</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" id="female" name="gender" value="female">
+                <label class="form-check-label" for="female">Female</label>
+              </div>
+            </div>
+
+            <div class="d-grid gap-2 d-md-block btn-create-section">
+              <!-- Note: The original form had type="submit" for one button and type="button" for others -->
+              <!-- Ideally these should use JS to handle actions or different forms, keeping strict structure here -->
+              <input class="btn btn-primary" type="submit" value="Submit">
+              <button id="btn-create" class="btn btn-success" type="button">Create New</button>
+              <button id="btn-clear" class="btn btn-secondary" type="button">Clear</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="col-md-6 d-flex align-items-end justify-content-end">
+        <form id="logoutForm" method="GET" action="/logout">
+          <!-- Not implemented in app.js but kept for UI consistency -->
+          <button class="btn btn-danger btn-lg" type="button" onclick="window.location.href='/login'">Log Out</button>
+        </form>
+      </div>
+    </div>
+
+  </div>
+</body>
+
+</html>
